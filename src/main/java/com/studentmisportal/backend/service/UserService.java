@@ -1,5 +1,7 @@
 package com.studentmisportal.backend.service;
 
+import com.studentmisportal.backend.dto.ApiResponseDto;
+import com.studentmisportal.backend.dto.LoginResponseDto;
 import com.studentmisportal.backend.dto.UserLoginRequest;
 import com.studentmisportal.backend.dto.UserRegisterRequestDto;
 import com.studentmisportal.backend.entity.Department;
@@ -24,11 +26,11 @@ public class UserService {
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
 
-    public String registerUser(UserRegisterRequestDto userRequest){
+    public ApiResponseDto registerUser(UserRegisterRequestDto userRequest){
         System.out.println(userRequest);
         boolean userExits = this.userRepository.existsByMis(userRequest.getMis());
         if(userExits){
-            return "User already exists";
+            return new ApiResponseDto("User already exists");
         }
         User user = new User();
         user.setMis(userRequest.getMis());
@@ -42,10 +44,10 @@ public class UserService {
         user.setPhone(userRequest.getPhone());
         userRepository.save(user);
 
-        return "User registered successfully";
+        return new ApiResponseDto("User registered successfully");
     }
 
-    public String loginUser(UserLoginRequest request) {
+    public LoginResponseDto loginUser(UserLoginRequest request) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -55,7 +57,17 @@ public class UserService {
         );
 
         if (authentication.isAuthenticated()) {
-            return jwtUtil.generateToken(request.getMis());
+
+            User user = userRepository.findByMis(request.getMis())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            String token = jwtUtil.generateToken(user);
+
+            return new LoginResponseDto(
+                    "Login successful",
+                    token,
+                    user.getMis()
+            );
         }
 
         throw new RuntimeException("Invalid credentials");
