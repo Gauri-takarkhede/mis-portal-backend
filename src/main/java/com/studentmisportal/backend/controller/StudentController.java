@@ -1,6 +1,9 @@
 package com.studentmisportal.backend.controller;
+import com.studentmisportal.backend.dto.ApiResponseDto;
+import com.studentmisportal.backend.dto.StudentDetailsDto;
 import com.studentmisportal.backend.dto.UserDto;
 import com.studentmisportal.backend.service.StudentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,5 +27,13 @@ public class StudentController {
     @GetMapping("/profile/{mis}")
     public ResponseEntity<UserDto> getStudentProfileById(@PathVariable String mis) {
         return ResponseEntity.ok(studentService.getStudentByMis(mis));
+    }
+
+    @PostMapping("/add-details/{mis}")
+    public ResponseEntity<ApiResponseDto> addStudentDetails(@PathVariable String mis,
+                                                            @Valid @RequestBody StudentDetailsDto dto) {
+        System.out.println("I am in details controller");
+        ApiResponseDto response = studentService.addStudentDetails(mis, dto);
+        return ResponseEntity.ok(response);
     }
 }

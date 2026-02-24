@@ -1,8 +1,11 @@
 package com.studentmisportal.backend.entity;
 
+import com.studentmisportal.backend.entity.type.*;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -13,9 +16,50 @@ public class FacultyDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private String address;
+
+    @Column(nullable = false)
+    private String city;
+
+    @Column(nullable = false)
+    private String state;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private BloodGroupType bloodGroup;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ReligionType religion;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private CategoryType category;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private CourseType course;
+
+    @Column(nullable = false)
+    private LocalDate dateOfBirth;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private GenderType gender;
+
+    @Column(nullable = false)
+    private LocalDate dateOfJoining;
+
+    @Column(nullable = false)
+    private String specialization;
+
+    @Column(nullable = false)
+    private String designation;
+
     private String profileImage;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
+    @OneToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 }

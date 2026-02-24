@@ -1,7 +1,6 @@
 package com.studentmisportal.backend.controller;
 
 import com.studentmisportal.backend.dto.NewDepartmentDto;
-import com.studentmisportal.backend.entity.Department;
 import com.studentmisportal.backend.service.DepartmentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

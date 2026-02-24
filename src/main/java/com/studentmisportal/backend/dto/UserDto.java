@@ -11,4 +11,6 @@ public class UserDto {
     private String mis;
     private RoleType role;
     private DepartmentType department;
+    private StudentDetailsDto studentDetails;
+    private FacultyDetailsDto facultyDetails;
 }

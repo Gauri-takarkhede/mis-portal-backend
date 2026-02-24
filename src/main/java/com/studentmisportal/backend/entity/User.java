@@ -44,4 +44,10 @@ public class User {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="department_id")
     private Department department;
+
+    @OneToOne(mappedBy = "user")
+    private StudentDetails studentDetails;
+
+    @OneToOne(mappedBy = "user")
+    private FacultyDetails facultyDetails;
 }
