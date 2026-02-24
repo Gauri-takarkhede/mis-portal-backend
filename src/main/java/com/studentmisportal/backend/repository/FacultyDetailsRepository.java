@@ -1,7 +1,6 @@
 package com.studentmisportal.backend.repository;
 
 import com.studentmisportal.backend.entity.FacultyDetails;
-import com.studentmisportal.backend.entity.StudentDetails;
 import com.studentmisportal.backend.entity.User;
 import com.studentmisportal.backend.entity.type.RoleType;
 import org.springframework.data.jpa.repository.JpaRepository;

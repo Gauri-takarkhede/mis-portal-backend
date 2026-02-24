@@ -8,6 +8,7 @@ import com.studentmisportal.backend.entity.Department;
 import com.studentmisportal.backend.entity.User;
 import com.studentmisportal.backend.repository.DepartmentRepository;
 import com.studentmisportal.backend.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,7 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -73,4 +73,29 @@ public class UserService {
         throw new RuntimeException("Invalid credentials");
     }
 
+    private String getTokenFromRequest(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            return authHeader.substring(7);
+        }
+
+        return null;
+    }
+
+    public String getMis(HttpServletRequest request) {
+        String token = getTokenFromRequest(request);
+        return token != null ? jwtUtil.extractMis(token) : null;
+    }
+
+    public String getUserName(HttpServletRequest request) {
+        String token = getTokenFromRequest(request);
+        return token != null ? jwtUtil.extractUsername(token) : null;
+    }
+
+
+    public String getRole(HttpServletRequest request) {
+        String token = getTokenFromRequest(request);
+        return token != null ? jwtUtil.extractRole(token) : null;
+    }
 }
