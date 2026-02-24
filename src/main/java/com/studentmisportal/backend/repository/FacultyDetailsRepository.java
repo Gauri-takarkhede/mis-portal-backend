@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FacultyDetailsRepository extends JpaRepository<FacultyDetails, Long> {
-    @Query("""
-    SELECT u
-    FROM User u
-    LEFT JOIN FETCH u.facultyDetails
-    WHERE u.role = :role
-""")
-    List<User> findFacultyWithDetails(RoleType role);
+//    @Query("""
+//    SELECT u
+//    FROM User u
+//    LEFT JOIN FETCH u.facultyDetails
+//    WHERE u.role = :role
+//""")
+//    List<User> findFacultyWithDetails(RoleType role);
 
     Optional<FacultyDetails> findByUser(User user);
 }

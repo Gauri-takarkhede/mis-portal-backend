@@ -6,7 +6,6 @@ import com.studentmisportal.backend.entity.FacultyDetails;
 import com.studentmisportal.backend.entity.User;
 import com.studentmisportal.backend.entity.type.RoleType;
 import com.studentmisportal.backend.repository.FacultyDetailsRepository;
-import com.studentmisportal.backend.repository.StudentDetailsRepository;
 import com.studentmisportal.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -23,7 +22,6 @@ public class FacultyService {
 
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
-    private final StudentDetailsRepository studentDetailsRepository;
     private final FacultyDetailsRepository facultyDetailsRepository;
 
     public List<UserDto> getAllFaculties()

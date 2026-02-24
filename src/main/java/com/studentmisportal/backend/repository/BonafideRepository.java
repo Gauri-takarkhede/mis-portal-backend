@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface BonafideRepository extends JpaRepository<Bonafide, Long> {
 
-    public List<Bonafide> findByStudentMis(String mis);
+     List<Bonafide> findByStudentMis(String mis);
 }

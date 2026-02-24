@@ -24,8 +24,7 @@ public class BonafideService {
         List<Bonafide> allBonafides = bonafideRepository.findAll();
 
         return allBonafides.stream()
-                .map(bonafide->{
-                    return modelMapper.map(bonafide, BonafideResponseDto.class);})
+                .map(bonafide-> modelMapper.map(bonafide, BonafideResponseDto.class))
                 .toList();
     }
 
@@ -33,8 +32,7 @@ public class BonafideService {
         List<Bonafide> allBonafides = bonafideRepository.findByStudentMis(mis);
 
         return allBonafides.stream()
-                .map(bonafide->{
-                    return modelMapper.map(bonafide, BonafideResponseDto.class);})
+                .map(bonafide-> modelMapper.map(bonafide, BonafideResponseDto.class))
                 .toList();
     }
 
