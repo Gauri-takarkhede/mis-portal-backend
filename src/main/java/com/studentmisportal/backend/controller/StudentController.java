@@ -1,4 +1,5 @@
 package com.studentmisportal.backend.controller;
+
 import com.studentmisportal.backend.dto.ApiResponseDto;
 import com.studentmisportal.backend.dto.StudentDetailsDto;
 import com.studentmisportal.backend.dto.UserDto;
@@ -32,7 +33,6 @@ public class StudentController {
     @PostMapping("/add-details/{mis}")
     public ResponseEntity<ApiResponseDto> addStudentDetails(@PathVariable String mis,
                                                             @Valid @RequestBody StudentDetailsDto dto) {
-        System.out.println("I am in details controller");
         ApiResponseDto response = studentService.addStudentDetails(mis, dto);
         return ResponseEntity.ok(response);
     }

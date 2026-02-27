@@ -8,12 +8,15 @@ import com.studentmisportal.backend.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
-
 
 @RestController
 @RequestMapping("/bonafide")
@@ -37,27 +40,39 @@ public class BonafideController {
 
     @PostMapping("/")
     public ResponseEntity<ApiResponseDto> getBonafide(@Valid  @RequestBody BonafideRequestDto bonafideRequestDto, HttpServletRequest request){
-
         String response =  bonafideService.createBonafideRequest(
                 bonafideRequestDto, userService.getMis(request), userService.getUserName(request)
         );
-        System.out.println(response);
-            return ResponseEntity.ok(
-                   new ApiResponseDto(response)
-            );
-
+        return ResponseEntity.ok(new ApiResponseDto(response));
     }
 
+    @PreAuthorize("hasRole('FACULTY')")
     @PatchMapping("/approve/{id}")
     public ResponseEntity<ApiResponseDto> approveBonafide(@PathVariable Long id, HttpServletRequest request){
-
         return ResponseEntity.ok(new ApiResponseDto(bonafideService.approveBonafide(id, userService.getUserName(request))));
     }
 
+    @PreAuthorize("hasRole('FACULTY')")
     @PatchMapping("/reject/{id}")
     public ResponseEntity<ApiResponseDto> rejectBonafide(@PathVariable Long id, HttpServletRequest request){
-
         return ResponseEntity.ok(new ApiResponseDto(bonafideService.rejectBonafide(id, userService.getUserName(request))));
     }
 
+    @GetMapping("/download/{id}")
+    public ResponseEntity<byte[]> downloadBonafide(@PathVariable Long id) throws IOException {
+
+        byte[] pdfBytes = bonafideService.generateBonafide(id);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDisposition(
+                ContentDisposition.attachment()
+                        .filename("bonafide_certificate.pdf")
+                        .build()
+        );
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(pdfBytes);
+    }
 }

@@ -33,7 +33,6 @@ public class FacultyController {
     @PostMapping("/add-details/{mis}")
     public ResponseEntity<ApiResponseDto> addStudentDetails(@PathVariable String mis,
                                                             @Valid @RequestBody FacultyDetailsDto dto) {
-        System.out.println("I am in faculty details controller");
         ApiResponseDto response = facultyService.addFacultyDetails(mis, dto);
         return ResponseEntity.ok(response);
     }

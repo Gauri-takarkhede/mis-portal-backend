@@ -21,8 +21,6 @@ public class AuthController {
     @PreAuthorize("hasRole('FACULTY')")
     @PostMapping("/register")
     public ResponseEntity<ApiResponseDto> register(@Valid @RequestBody UserRegisterRequestDto newUser){
-
-        System.out.println(newUser+" incontroller");
         ApiResponseDto registrationResponse = userService.registerUser(newUser);
         return ResponseEntity.ok(registrationResponse);
     }

@@ -27,6 +27,7 @@ public class Bonafide {
     private String reason;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private BonafideStatusType status;
 
     private String approvedBy;
