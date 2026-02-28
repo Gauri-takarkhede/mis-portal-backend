@@ -1,7 +1,7 @@
 package com.studentmisportal.backend.service;
 import com.studentmisportal.backend.dto.ApiResponseDto;
 import com.studentmisportal.backend.dto.FacultyDetailsDto;
-import com.studentmisportal.backend.dto.UserDto;
+import com.studentmisportal.backend.dto.FacultyDto;
 import com.studentmisportal.backend.entity.FacultyDetails;
 import com.studentmisportal.backend.entity.User;
 import com.studentmisportal.backend.entity.type.RoleType;
@@ -24,24 +24,24 @@ public class FacultyService {
     private final ModelMapper modelMapper;
     private final FacultyDetailsRepository facultyDetailsRepository;
 
-    public List<UserDto> getAllFaculties()
+    public List<FacultyDto> getAllFaculties()
     {
         List<User> allFaculties= userRepository.findByRole(RoleType.FACULTY);
 
         return allFaculties.stream()
                 .map(user-> {
-                    UserDto stuDto = modelMapper.map(user, UserDto.class);
-                    stuDto.setDepartment(user.getDepartment().getDepartmentName());
-                    stuDto.setRole(user.getRole());
-                    return stuDto;
+                    FacultyDto facultyDto = modelMapper.map(user, FacultyDto.class);
+                    facultyDto.setDepartment(user.getDepartment().getDepartmentName());
+                    facultyDto.setRole(user.getRole());
+                    return facultyDto;
                 }).toList();
     }
 
-    public UserDto getFacultyByMis(String mis)
+    public FacultyDto getFacultyByMis(String mis)
     {
         User faculty =  userRepository.findByMisAndRole(mis, RoleType.FACULTY)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        return  modelMapper.map(faculty, UserDto.class);
+        return  modelMapper.map(faculty, FacultyDto.class);
     }
 
     public ApiResponseDto addFacultyDetails(String mis, FacultyDetailsDto dto) {

@@ -2,7 +2,7 @@ package com.studentmisportal.backend.controller;
 
 import com.studentmisportal.backend.dto.ApiResponseDto;
 import com.studentmisportal.backend.dto.FacultyDetailsDto;
-import com.studentmisportal.backend.dto.UserDto;
+import com.studentmisportal.backend.dto.FacultyDto;
 import com.studentmisportal.backend.service.FacultyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +21,12 @@ public class FacultyController {
 
     @GetMapping("/profile")
     @PreAuthorize("hasRole('FACULTY')")
-    public ResponseEntity<List<UserDto>> getStudentProfiles() {
+    public ResponseEntity<List<FacultyDto>> getStudentProfiles() {
         return ResponseEntity.ok(facultyService.getAllFaculties());
     }
 
     @GetMapping("/profile/{mis}")
-    public ResponseEntity<UserDto> getStudentProfileById(@PathVariable String mis) {
+    public ResponseEntity<FacultyDto> getStudentProfileById(@PathVariable String mis) {
         return ResponseEntity.ok(facultyService.getFacultyByMis(mis));
     }
 
