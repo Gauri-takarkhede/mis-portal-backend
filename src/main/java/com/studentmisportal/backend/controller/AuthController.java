@@ -8,7 +8,6 @@ import com.studentmisportal.backend.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,7 +17,7 @@ public class AuthController {
 
     private final UserService userService;
 
-    @PreAuthorize("hasRole('FACULTY')")
+
     @PostMapping("/register")
     public ResponseEntity<ApiResponseDto> register(@Valid @RequestBody UserRegisterRequestDto newUser){
         ApiResponseDto registrationResponse = userService.registerUser(newUser);
