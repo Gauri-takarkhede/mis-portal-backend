@@ -23,7 +23,8 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    public String generateToken(User user) {
+    public String generateAccessToken(User user) {
+
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", user.getRole().name());
         claims.put("username", user.getUsername());
@@ -33,7 +34,17 @@ public class JwtUtil {
                 .addClaims(claims)
                 .setSubject(user.getMis())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60))
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    public String generateRefreshToken(User user) {
+
+        return Jwts.builder()
+                .setSubject(user.getMis())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 7))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -66,5 +77,22 @@ public class JwtUtil {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+    }
+
+    public boolean isTokenValid(String token, String mis) {
+        try {
+            final String userMis = extractSubject(token);
+            return (userMis.equals(mis) && !isTokenExpired(token));
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
+
+    public Date extractExpiration(String token) {
+        return extractAllClaims(token).getExpiration();
     }
 }

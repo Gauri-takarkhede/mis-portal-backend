@@ -9,6 +9,16 @@ import java.io.IOException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<String> handleInvalidTokenException(InvalidTokenException ex) {
+
+        System.out.println("inside invalid token exception handler");
+
+        return ResponseEntity
+                .status(401)
+                .body(ex.getMessage());
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> handleRuntimeException(RuntimeException ex) {
 

@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,6 +26,8 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfig {
     private final JwtFilter jwtFilter;
+    private final JwtAuthenticationEntryPoint authenticationEntryPoint;
+
     @Value("${frontend.url}")
     private String frontendUrl;
 
@@ -32,7 +35,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> {})
+                .cors(Customizer.withDefaults())
+                .exceptionHandling(exception ->
+                        exception.authenticationEntryPoint(authenticationEntryPoint)
+                )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
                         .anyRequest().authenticated()

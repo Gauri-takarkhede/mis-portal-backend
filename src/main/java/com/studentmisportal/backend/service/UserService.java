@@ -6,14 +6,19 @@ import com.studentmisportal.backend.dto.UserLoginRequest;
 import com.studentmisportal.backend.dto.UserRegisterRequestDto;
 import com.studentmisportal.backend.entity.Department;
 import com.studentmisportal.backend.entity.User;
+import com.studentmisportal.backend.exception.InvalidTokenException;
 import com.studentmisportal.backend.repository.DepartmentRepository;
 import com.studentmisportal.backend.repository.UserRepository;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.csrf.InvalidCsrfTokenException;
 import org.springframework.stereotype.Service;
 
 
@@ -61,11 +66,13 @@ public class UserService {
             User user = userRepository.findByMis(request.getMis())
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
-            String token = jwtUtil.generateToken(user);
+            String accessToken = jwtUtil.generateAccessToken(user);
+            String refreshToken = jwtUtil.generateRefreshToken(user);
 
             return new LoginResponseDto(
                     "Login successful",
-                    token,
+                    accessToken,
+                    refreshToken,
                     user.getMis()
             );
         }
@@ -97,5 +104,26 @@ public class UserService {
     public String getRole(HttpServletRequest request) {
         String token = getTokenFromRequest(request);
         return token != null ? jwtUtil.extractRole(token) : null;
+    }
+
+    public LoginResponseDto getRefreshToken(String refreshToken) {
+
+        String mis = jwtUtil.extractSubject(refreshToken);
+
+        if (!jwtUtil.isTokenValid(refreshToken, mis)) {
+            throw new InvalidTokenException("Invalid refresh token");
+        }
+
+        User user = userRepository.findByMis(mis)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        String newAccessToken = jwtUtil.generateAccessToken(user);
+
+        return new LoginResponseDto(
+                "Token refreshed",
+                newAccessToken,
+                "",
+                user.getMis()
+        );
     }
 }
