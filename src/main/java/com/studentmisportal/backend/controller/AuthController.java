@@ -36,7 +36,7 @@ public class AuthController {
 
         Cookie cookie = new Cookie("refreshToken", loginResponse.getRefreshToken());
         cookie.setHttpOnly(true);
-        cookie.setSecure(false);
+        cookie.setSecure(true);
         cookie.setPath("/");
         cookie.setMaxAge(7 * 24 * 60 * 60);
 
@@ -76,7 +76,7 @@ public class AuthController {
 
         Cookie cookie = new Cookie("refreshToken", null);
         cookie.setHttpOnly(true);
-        cookie.setSecure(false);
+        cookie.setSecure(true);
         cookie.setPath("/");
         cookie.setMaxAge(0); // delete cookie
 
