@@ -39,6 +39,7 @@ public class AuthController {
         cookie.setSecure(true);
         cookie.setPath("/");
         cookie.setMaxAge(7 * 24 * 60 * 60);
+        cookie.setAttribute("SameSite", "None");
 
         response.addCookie(cookie);
         
@@ -79,6 +80,7 @@ public class AuthController {
         cookie.setSecure(true);
         cookie.setPath("/");
         cookie.setMaxAge(0); // delete cookie
+        cookie.setAttribute("SameSite", "None");
 
         response.addCookie(cookie);
 
