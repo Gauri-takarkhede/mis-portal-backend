@@ -106,7 +106,7 @@ public class UserService {
         return token != null ? jwtUtil.extractRole(token) : null;
     }
 
-    public LoginResponseDto getRefreshToken(String refreshToken) {
+    public LoginResponseDto getNewAccessToken(String refreshToken) {
 
         String mis = jwtUtil.extractSubject(refreshToken);
 

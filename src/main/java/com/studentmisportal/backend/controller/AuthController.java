@@ -67,7 +67,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        LoginResponseDto response = userService.getRefreshToken(refreshToken);
+        LoginResponseDto response = userService.getNewAccessToken(refreshToken);
 
         return ResponseEntity.ok(response);
     }
