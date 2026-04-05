@@ -10,6 +10,8 @@ import com.studentmisportal.backend.repository.NotificationRepository;
 import com.studentmisportal.backend.repository.ScholarshipRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,6 +32,7 @@ public class ScholarshipService {
     private final SimpMessagingTemplate messagingTemplate;
     private final NotificationRepository notificationRepository;
 
+//    @Cacheable(value = "scholarships", key = "'all'")
     public List<ScholarshipResponseDto> getAllScholarships(){
         List<Scholarship> scholarships = scholarshipRepository.findAll();
 
@@ -38,6 +41,7 @@ public class ScholarshipService {
     }
 
 
+//    @CacheEvict(value = "scholarships", allEntries = true)
     public String uploadFile(ScholarshipRequestDto scholarshipDetails) throws IOException {
         MultipartFile file = scholarshipDetails.getFile();
 
@@ -59,12 +63,6 @@ public class ScholarshipService {
         scholarship.setCreationDate(LocalDate.now());
 
         scholarshipRepository.save(scholarship);
-
-//        // 🔔 SEND WEBSOCKET NOTIFICATION
-//        messagingTemplate.convertAndSend(
-//                "/topic/notifications",
-//                "New scholarship uploaded: " + scholarship.getTitle()
-//        );
 
         Notification notification = new Notification();
         notification.setMessage("New scholarship uploaded: " + scholarship.getTitle());
