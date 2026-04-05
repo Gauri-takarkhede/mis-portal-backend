@@ -32,7 +32,7 @@ public class ScholarshipService {
     private final SimpMessagingTemplate messagingTemplate;
     private final NotificationRepository notificationRepository;
 
-//    @Cacheable(value = "scholarships", key = "'all'")
+    @Cacheable(value = "scholarships", key = "'all'")
     public List<ScholarshipResponseDto> getAllScholarships(){
         List<Scholarship> scholarships = scholarshipRepository.findAll();
 
@@ -41,7 +41,7 @@ public class ScholarshipService {
     }
 
 
-//    @CacheEvict(value = "scholarships", allEntries = true)
+    @CacheEvict(value = "scholarships", allEntries = true)
     public String uploadFile(ScholarshipRequestDto scholarshipDetails) throws IOException {
         MultipartFile file = scholarshipDetails.getFile();
 

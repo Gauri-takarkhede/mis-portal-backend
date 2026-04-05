@@ -3,6 +3,7 @@ package com.studentmisportal.backend.service;
 import com.studentmisportal.backend.entity.User;
 import com.studentmisportal.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,6 +18,7 @@ public class UserInfoDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
+    @Cacheable(value = "userDetails", key = "#mis")
     @Override
     public UserDetails loadUserByUsername(String mis) throws UsernameNotFoundException {
 
